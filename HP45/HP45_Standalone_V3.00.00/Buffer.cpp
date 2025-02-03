@@ -49,6 +49,7 @@ class Buffer {
         temp_read_pos = temp_read_pos % buffer_size; //overflow protection
         return positionBuffer[temp_read_pos];
       }
+      return 0; // WILL ADDED THIS SO IT COMPILES - MSD 22701
     }
     int32_t Add(int32_t temp_position, uint16_t temp_input[22]) { //adds a coordinate (int32_t and a burst to the buffer, returns space left if successful, -1 if failed
       int32_t temp_left = WriteLeft();
