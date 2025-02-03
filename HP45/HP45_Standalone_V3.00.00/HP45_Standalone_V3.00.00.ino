@@ -97,7 +97,11 @@ uint16_t printheadDPI = 600;
 uint32_t temp_timer, temp_delay = 1000000;
 uint8_t temp_burst_on = 0;
 
+// Will added
+extern "C" uint32_t set_arm_clock(uint32_t frequency);
+
 void setup() {
+  set_arm_clock(96000000); // Will added
   delay(2500); //delay to give serial time to start on pc side
   Ser.Begin(); //start serial connection
   BurstBuffer.ClearAll(); //reset the buffer
