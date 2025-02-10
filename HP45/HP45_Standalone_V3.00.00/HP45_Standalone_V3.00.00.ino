@@ -53,7 +53,11 @@
 #include "buffer.cpp"
 #include "Serialcom.cpp"
 
-Printhead HP45(29, 33, 24, 16, 28, 15, 26, 14, 27, 20, 8, 18, 7, 17, 25, 19, 3, 2, 23, 22, A11, A10);
+// original: HP45(29, 33, 24, 16, 28, 15, 26, 14, 27, 20, 8, 18, 7, 17, 25, 19, 3, 2, 23, 22, A11, A10)
+// updated:               28      34              35                    27            22  23       
+
+// updated is used here:
+Printhead HP45(29, 33, 28, 16, 34, 15, 26, 14, 35, 20, 8, 18, 7, 17, 27, 19, 3, 2, 22, 23, A11, A10);
 Buffer BurstBuffer;
 SerialCommand Ser;
 
