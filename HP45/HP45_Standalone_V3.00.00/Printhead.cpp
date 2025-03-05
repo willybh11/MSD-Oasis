@@ -21,7 +21,8 @@
 #include "Printhead.h" //<*whispers: "there is actually nothing in there"
 
 #define pulseSplits 3 //how many splits there are in a pulse
-#define checkThreshold 10 //how many pulses each nozzle needs to take without signal to consider it broken.
+#define checkThreshold 100 //how many pulses each nozzle needs to take without signal to consider it broken.
+//! Used to be 10
 #define maxPreheatPulses 20000 //the max number of pulses for a preheat per nozzle
 
 class Printhead {
@@ -251,14 +252,18 @@ class Printhead {
     }
     int8_t Preheat(uint16_t temp_pulses) { //does a given number of short pulses on the printhead to preheat the nozzles
       uint16_t temp_pulse = 16383;
-      //Serial.print("Preheating: "); Serial.println(temp_pulses);
+      Serial.print("Preheating: "); Serial.println(temp_pulses);
       if (headEnabled == 0) return 0; //check if burst is possible, return a 0 if not
-      //Serial.print("Head enabled, preheating");
+      Serial.print("Head enabled, preheating");
       //temp_pulses = constrain(temp_pulses, 0, maxPreheatPulses);
       for (uint16_t pulses = 0; pulses < temp_pulses; pulses++) {
+        if (pulses % 1000 == 0) {
+          Serial.print("pulse "); Serial.println(pulses);
+        }
         AddressReset(); //set address to 0
         for (uint8_t a = 0; a < 22; a++) {
-        AddressNext(); //go to next address
+            // Serial.print("a "); Serial.println(a);
+          AddressNext(); //go to next address
           PrimitiveShortPulse(temp_pulse); //pulse the given address
         }
       }
@@ -371,8 +376,10 @@ class Printhead {
       //Serial.print("RSR resistor: "); Serial.println(temp_tsr_res);
 
       //check both to be reasonable values
-      if (temp_10x_res < 150.0 || temp_10x_res > 500.0) return -2;
-      if (temp_tsr_res < 150.0 || temp_tsr_res > 500.0) return -2;
+      Serial.print("10x_res: "); Serial.println(temp_10x_res);
+      Serial.print("tsr_res: "); Serial.println(temp_tsr_res);
+      // if (temp_10x_res < 150.0 || temp_10x_res > 500.0) return -2;
+      // if (temp_tsr_res < 150.0 || temp_tsr_res > 500.0) return -3;
 
       //get the TSR - 10X
       //at 10 ohms, the temperature is 20C, for every 1.1 ohms the temperature rises 1 degree
