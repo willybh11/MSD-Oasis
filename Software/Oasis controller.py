@@ -425,13 +425,14 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #start printing if file is svg, inkjet and motion are started
         if (self.file_loaded == 2 and self.inkjet_connection_state == 1 and self.grbl_connection_state == 1):
+        # if (self.file_loaded == 2  and self.grbl_connection_state == 1):
             self.printing_state = 2 #set printing state
             self.inkjet.ClearBuffer() #clear inkjet buffer on HP45
             self.grbl.Home() #home printer
             
             #make variables
-            self.build_center_x = 163.0 #where the center of the build platform is
-            self.build_center_y = 111.0 #where the center of the build platform is
+            self.build_center_x = 145.0 # 163.0 #where the center of the build platform is
+            self.build_center_y = -15.0 # 111.0 #where the center of the build platform is
             self.print_speed = 3000.0 #how fast to print
             self.travel_speed = 15000.0 #how fast to travel
             self.acceleration_distance = 20.0 #how much to accelerate before printing
@@ -757,8 +758,9 @@ class MainWindow(QtWidgets.QMainWindow):
         #determine pixel to position multiplier (in millimeters)
         self.pixel_to_pos_multiplier = 25.4 / self.imageconverter.GetDPI() 
         #determine x and y start position (in millimeters)
-        self.y_start_pos = 100.0
-        self.x_start_pos = 150.0
+        # will changed
+        self.y_start_pos = -15 # 100.0
+        self.x_start_pos = 145.0 # 150.0
         self.y_acceleration_distance = 25.0
         
         self.sweep_x_min_pos = self.sweep_x_min
