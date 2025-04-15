@@ -120,7 +120,10 @@ void setup() {
 
 void loop() {
   UpdateAll(); //update all critical functions
-
+  // Serial.print("*************************F_CPU=");
+  // Serial.println(F_CPU);
+  // Serial.print("*************************F_CPU_ACTUAL=");
+  // Serial.println(F_CPU_ACTUAL);
   /*if (millis() > temp_timer + temp_delay) {
     temp_timer = millis();
     Serial.print("Pos0: "); Serial.print(CurrentPosition[0]); Serial.print(" Burst on: "); Serial.println(temp_burst_on);
