@@ -61,9 +61,11 @@ class GRBL(serial.Serial):
         
         self.spreader_state = 0
         
-        self.nl_back_pos_x = 100.0 #where x starts feeding
+        # X AND Y WERE SWAPPED ! This made things confusing and new layer kinda busted
+        self.nl_back_pos_x = 5.0 # 100.0 #where x starts feeding
         self.nl_back_pos_y = 240.0 #where y starts and ends while feeding
-        self.nl_front_pos_x = 475.0 #where x ends
+        self.nl_front_pos_x = 5 # 475.0 #where x ends
+        self.nl_front_pos_y = -340 # 475.0 #where x ends
         self.nl_travel_speed = 12000.0 #how fast new layer travels
         self.nl_feed_speed = 6000.0 #how fast new layer feeds (default 3000)
         self.nl_piston_speed = 150.0 #how fast the pistons move
@@ -332,6 +334,7 @@ class GRBL(serial.Serial):
             #b moves down 1, moves up 0.25-0.5-1 = -1.25 (nett -0.25)
             #b moves down 1, moves down 0.5-1 = -0.5 (nett 0.5)
             
+            print("Moving to back pos");
             self.SerialGotoXY(self.nl_back_pos_x, self.nl_back_pos_y, self.nl_travel_speed) #move gantry to back position
             
             #try to take picture
@@ -354,9 +357,9 @@ class GRBL(serial.Serial):
             
             
             self.SerialWriteBufferRaw("G90") #set motion to absolute
-            self.SpreaderSet(1) #start spreader
-            self.SerialGotoXY(self.nl_front_pos_x, self.nl_back_pos_y, self.nl_feed_speed) #move gantry to overshoot
-            self.SpreaderSet(0) #stop spreader
+            # self.SpreaderSet(1) #start spreader
+            self.SerialGotoXY(self.nl_front_pos_x, self.nl_front_pos_y, self.nl_travel_speed) #move gantry to overshoot # Corrected an error on this line, was using feed speed !
+            # self.SpreaderSet(0) #stop spreader0
             self.SerialWriteBufferRaw("G91") #set motion to relative
             self.SerialWriteBufferRaw("G1 Z" + str(self.nl_piston_hysteresis) + " F" + str(self.nl_piston_speed)) #move hysteresis down
             self.SerialWriteBufferRaw("G1 Z" + str(temp_hysteresis_clearance) + " F" + str(self.nl_piston_speed)) #move build pistons down clearance amount
@@ -364,13 +367,13 @@ class GRBL(serial.Serial):
             self.SerialWriteBufferRaw("G1 A" + str(temp_hysteresis_clearance) + " F" + str(self.nl_piston_speed)) #move feed pistons down clearance amount
             self.SerialWriteBufferRaw("G90") #set motion to absolute
             
-            
+            print("waiting until state not idle...");
             #wait till state is not idle anymore
             self.StatusIndexSet()
             while (self.StatusIndexChanged() == 0):
                 time.sleep(0.005)
             #print("Halt exited, state: " + self.motion_state)
-            
+            print("Done waiting");
             self.nl_state = 0 #set new layer state to in progress
         
         
