@@ -121,7 +121,8 @@ class HP45(serial.Serial):
                 break
             if temp_success == 1: 
                 read_buffer += temp_read
-                #print(read_buffer)
+                # print("********Read buffer:")
+                # print(read_buffer)
                 #add line to read buffer
                 
             temp_decode = read_buffer.partition('\n') #check for EOL conditions
@@ -130,40 +131,40 @@ class HP45(serial.Serial):
                 read_line = str(temp_decode[0])
                 #read_line = read_line.lower() #make all lower case for checking #(DONT!!!)
                 read_line = read_line.rstrip() #remove carriage return
-                print("reading line: " + str(read_line)) 
+                # print("reading line: " + str(read_line)) 
                 #check purpose of response
                 if (read_line.startswith('OK')): #if ok was found,
                     self.ok_state = 1 #set ok state to 1
-                    print("OK found, setting ok state")
+                    # print("OK found, setting ok state")
                 if (read_line.startswith('GTP:')):
-                    print("getting temperature")
+                    # print("getting temperature")
                     read_line = read_line.partition(':') #split at :
                     read_line = read_line[2] #get end
                     temp_return_string = B64.B64FromSingle(read_line)
-                    print("got: ", temp_return_string);
+                    # print("got: ", temp_return_string);
                     self.inkjet_temperature = float(temp_return_string)
                     self.inkjet_temperature /= 10.0 #get whole degrees
                 if (read_line.startswith('GEP:')):
-                    print("getting position")
+                    # print("getting position")
                     read_line = read_line.partition(':') #split at :
                     read_line = read_line[2] #get end
-                    print("Decoding: " + read_line)
+                    # print("Decoding: " + read_line)
                     temp_return_string = B64.B64FromSingle(read_line)
-                    print("position found: " + str(temp_return_string))
+                    # print("position found: " + str(temp_return_string))
                     self.inkjet_x_pos = float(temp_return_string)
                     self.inkjet_x_pos /= 1000.0 #get millimeters
                 if (read_line.startswith('BWL:')):
-                    print("getting buffer write left")
+                    # print("getting buffer write left")
                     read_line = read_line.partition(':') #split at :
                     read_line = read_line[2] #get end
                     temp_return_string = B64.B64FromSingle(read_line)
                     self.inkjet_writeleft = int(temp_return_string)
                     
                 if (read_line.startswith('THD:')): 
-                    print("decoding test results")
+                    # print("decoding test results")
                     read_line = read_line.partition(':') #split at :
                     read_line = read_line[2] #get end
-                    print("Decoding: " + read_line)
+                    # print("Decoding: " + read_line)
                     temp_return_string = B64.B64FromTestArray(read_line)
                     temp_total_nozzle = 0
                     temp_working_nozzles = 0
@@ -178,11 +179,11 @@ class HP45(serial.Serial):
             #is ok state is 1, and line buffered, send new line
             if (self.ok_state == 1):
                 if (self.send_get_status == 1): 
-                    print("sending status")
+                    # print("sending status")
                     self.ok_state = 0 #set ok state to 0
                     self.SerialWriteRaw(self.send_status_buffer + "\r",0) #send status request
                     self.send_get_status = 0 #set get status to 0
-                    print("Getting status")
+                    # print("Getting status")
                 elif (self.BufferLeft() > 0): #if there are lines left to print
                     if (self.inkjet_writeleft > 50): #only send if space left in hp45 buffer
                         print(self.BufferLeft())

@@ -424,14 +424,15 @@ class MainWindow(QtWidgets.QMainWindow):
         print("Starting print from SVG")
         
         #start printing if file is svg, inkjet and motion are started
-        if (self.file_loaded == 2 and self.inkjet_connection_state == 1 and self.grbl_connection_state == 1):
+        # if (self.file_loaded == 2 and self.inkjet_connection_state == 1 and self.grbl_connection_state == 1):
+        if (self.file_loaded == 2 and self.grbl_connection_state == 1):
             self.printing_state = 2 #set printing state
             self.inkjet.ClearBuffer() #clear inkjet buffer on HP45
             self.grbl.Home() #home printer
             
             #make variables
-            self.build_center_x = 163.0 #where the center of the build platform is
-            self.build_center_y = 111.0 #where the center of the build platform is
+            self.build_center_x = 265.0 # 163.0 #where the center of the build platform is
+            self.build_center_y = 105.0 # 111.0 #where the center of the build platform is
             self.print_speed = 3000.0 #how fast to print
             self.travel_speed = 15000.0 #how fast to travel
             self.acceleration_distance = 20.0 #how much to accelerate before printing

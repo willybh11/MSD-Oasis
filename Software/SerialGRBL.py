@@ -61,9 +61,9 @@ class GRBL(serial.Serial):
         
         self.spreader_state = 0
         
-        self.nl_back_pos_x = 100.0 #where x starts feeding
-        self.nl_back_pos_y = 240.0 #where y starts and ends while feeding
-        self.nl_front_pos_x = 475.0 #where x ends
+        self.nl_back_pos_x = 5.0 # 100.0 #where x starts feeding
+        self.nl_back_pos_y = 245.0 # 240.0 #where y starts and ends while feeding
+        self.nl_front_pos_x = 585.0 # 475.0 #where x ends
         self.nl_travel_speed = 12000.0 #how fast new layer travels
         self.nl_feed_speed = 6000.0 #how fast new layer feeds (default 3000)
         self.nl_piston_speed = 150.0 #how fast the pistons move

@@ -21,7 +21,7 @@
 #include "Printhead.h" //<*whispers: "there is actually nothing in there"
 
 #define pulseSplits 3 //how many splits there are in a pulse
-#define checkThreshold 100 //how many pulses each nozzle needs to take without signal to consider it broken.
+#define checkThreshold 150 //how many pulses each nozzle needs to take without signal to consider it broken.
 //! Used to be 10
 #define maxPreheatPulses 20000 //the max number of pulses for a preheat per nozzle
 
@@ -252,14 +252,14 @@ class Printhead {
     }
     int8_t Preheat(uint16_t temp_pulses) { //does a given number of short pulses on the printhead to preheat the nozzles
       uint16_t temp_pulse = 16383;
-      Serial.print("Preheating: "); Serial.println(temp_pulses);
+      // Serial.print("Preheating: "); Serial.println(temp_pulses);
       if (headEnabled == 0) return 0; //check if burst is possible, return a 0 if not
-      Serial.print("Head enabled, preheating");
+      // Serial.print("Head enabled, preheating");
       //temp_pulses = constrain(temp_pulses, 0, maxPreheatPulses);
       for (uint16_t pulses = 0; pulses < temp_pulses; pulses++) {
-        if (pulses % 1000 == 0) {
-          Serial.print("pulse "); Serial.println(pulses);
-        }
+        // if (pulses % 1000 == 0) {
+        //   Serial.print("pulse "); Serial.println(pulses);
+        // }
         AddressReset(); //set address to 0
         for (uint8_t a = 0; a < 22; a++) {
             // Serial.print("a "); Serial.println(a);
@@ -296,9 +296,11 @@ class Printhead {
       SetPrimitivePins(tempState); //set primitive pins
       noInterrupts(); //allow no interrupts during pulse
       SetPrimitiveClock(1); //set clock to 1
-      for (uint8_t d = 0; d < 12; d++) { //NOP delay (12 loops of 8 NOP's is ca 1.8us) (10=1.6, 14=2.1, 17=2.4)
-        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //8 NOP's
-      }
+      // for (uint8_t i = 0; i < 1000; i++) { // will added, temp attempt to fix
+        for (uint8_t d = 0; d < 12; d++) { //NOP delay (12 loops of 8 NOP's is ca 1.8us) (10=1.6, 14=2.1, 17=2.4)
+          __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //8 NOP's
+        }  
+      // }
       SetPrimitiveClear(0); //set clear to 0
       SetPrimitiveClock(0); //set clock to 0
       interrupts(); //allow interrupts again
@@ -309,9 +311,11 @@ class Printhead {
       SetPrimitivePins(tempState); //set primitive pins
       noInterrupts(); //allow no interrupts during pulse
       SetPrimitiveClock(1); //set clock to 1
-      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
-      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
-      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+      // for (uint8_t i = 0; i < 1000; i++) { // will added, temp attempt to fix
+        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+      // }
       SetPrimitiveClear(0); //set clear to 0
       SetPrimitiveClock(0); //set clock to 0
       interrupts(); //allow interrupts again
@@ -376,8 +380,8 @@ class Printhead {
       //Serial.print("RSR resistor: "); Serial.println(temp_tsr_res);
 
       //check both to be reasonable values
-      Serial.print("10x_res: "); Serial.println(temp_10x_res);
-      Serial.print("tsr_res: "); Serial.println(temp_tsr_res);
+    //   Serial.print("10x_res: "); Serial.println(temp_10x_res);
+    //   Serial.print("tsr_res: "); Serial.println(temp_tsr_res);
       // if (temp_10x_res < 150.0 || temp_10x_res > 500.0) return -2;
       // if (temp_tsr_res < 150.0 || temp_tsr_res > 500.0) return -3;
 
