@@ -21,8 +21,7 @@
 #include "Printhead.h" //<*whispers: "there is actually nothing in there"
 
 #define pulseSplits 3 //how many splits there are in a pulse
-#define checkThreshold 150 //how many pulses each nozzle needs to take without signal to consider it broken.
-//! Used to be 10
+#define checkThreshold 10 //how many pulses each nozzle needs to take without signal to consider it broken.
 #define maxPreheatPulses 20000 //the max number of pulses for a preheat per nozzle
 
 class Printhead {
@@ -296,11 +295,9 @@ class Printhead {
       SetPrimitivePins(tempState); //set primitive pins
       noInterrupts(); //allow no interrupts during pulse
       SetPrimitiveClock(1); //set clock to 1
-      // for (uint8_t i = 0; i < 1000; i++) { // will added, temp attempt to fix
-        for (uint8_t d = 0; d < 12; d++) { //NOP delay (12 loops of 8 NOP's is ca 1.8us) (10=1.6, 14=2.1, 17=2.4)
-          __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //8 NOP's
-        }  
-      // }
+      for (uint8_t d = 0; d < 12; d++) { //NOP delay (12 loops of 8 NOP's is ca 1.8us) (10=1.6, 14=2.1, 17=2.4)
+        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //8 NOP's
+      }  
       SetPrimitiveClear(0); //set clear to 0
       SetPrimitiveClock(0); //set clock to 0
       interrupts(); //allow interrupts again
@@ -311,11 +308,9 @@ class Printhead {
       SetPrimitivePins(tempState); //set primitive pins
       noInterrupts(); //allow no interrupts during pulse
       SetPrimitiveClock(1); //set clock to 1
-      // for (uint8_t i = 0; i < 1000; i++) { // will added, temp attempt to fix
-        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
-        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
-        __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
-      // }
+      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
+      __asm__("nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t""nop\n\t"); //18 NOP's, ca. 200ns
       SetPrimitiveClear(0); //set clear to 0
       SetPrimitiveClock(0); //set clock to 0
       interrupts(); //allow interrupts again
